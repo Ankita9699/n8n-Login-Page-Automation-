@@ -1,0 +1,339 @@
+{
+  "name": "OrangeHRM Login Authentication",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "16286915-a5c8-4006-a655-e6f75896e4df",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/login",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "9828667a-43c1-4fda-8c82-3654e76d7d14",
+      "name": "Get Login Page",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -16,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://opensource-demo.orangehrmlive.com/web/index.php/auth/validate",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "username",
+              "value": "Admin"
+            },
+            {
+              "name": "password",
+              "value": "admin123"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          },
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "id": "40b556e2-f868-4750-b955-5059649c60f8",
+      "name": "Submit Login Form",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://opensource-demo.orangehrmlive.com/web/index.php/dashboard/index",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        432,
+        528
+      ],
+      "id": "4cdd00ca-7bcb-466d-9dd8-86669abfa7b3",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da7da0eb-5f9f-48d3-a163-42969d78362d",
+              "name": "Admin",
+              "value": "Ankuri",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        656,
+        528
+      ],
+      "id": "76ec78d5-714c-4cf9-a572-0884fe733cea",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "instructions": "Add \n\nEmployee ID\n\nEmployee Name\n\nDepartment\n\nJob Title\n\nEmployment Status\n\nDate of Joining\n\nLast Working Day\n\nReason for Leaving\n\nManager Name\n\nFilter records where employee status is not active.",
+        "codeGeneratedForPrompt": "Add \n\nEmployee ID\n\nEmployee Name\n\nDepartment\n\nJob Title\n\nEmployment Status\n\nDate of Joining\n\nLast Working Day\n\nReason for Leaving\n\nManager Name\n\nFilter records where employee status is not active.",
+        "jsCode": "// This node is unable to perform the task as it requires natural language processing and the task is not related to data transformation.\n// This node can only generate code for data transformation based on the provided input data and schema.\n\nreturn $input.all();\n"
+      },
+      "type": "n8n-nodes-base.aiTransform",
+      "typeVersion": 1,
+      "position": [
+        880,
+        528
+      ],
+      "id": "d8486097-1dc0-404f-9b86-aefe8ee3950f",
+      "name": "AI Transform"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "25ef12b1-8155-4d89-a757-9d3ca153c347",
+              "leftValue": "User Role",
+              "rightValue": "ESS",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "9abd0a73-3dae-44d8-9ca7-4377b269ff0f",
+              "leftValue": "Status",
+              "rightValue": "Enabled",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        528
+      ],
+      "id": "87c3f821-2571-4445-abe0-a164ba2be847",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "spreadsheet",
+        "title": "HRM2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1552,
+        528
+      ],
+      "id": "9c07b0e0-7ed7-4207-842f-b53e891a4c0b",
+      "name": "Create spreadsheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "b4oRibYo8T3we8ms",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "453685a0-fdf5-4372-96bd-dc37ec0d18f8",
+              "name": "Usename ",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "2bf93df6-83b5-4579-9390-58ee0be74d37",
+              "name": "Status",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "include": "except",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1328,
+        528
+      ],
+      "id": "40012e5c-3576-4887-b7bd-8465570d7dc3",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Login Page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Login Page": {
+      "main": [
+        [
+          {
+            "node": "Submit Login Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit Login Form": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Transform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Transform": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create spreadsheet1": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Create spreadsheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7ff00a88-b012-45e7-9329-dd85e47ac8d6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "10cdef037c5911b46337ae821cb78d7e160a7ddc4dfe86dfca4a323a6e7e3e92"
+  },
+  "id": "KyXfTjZmJGvYk1zj",
+  "tags": []
+}
