@@ -43,18 +43,3 @@ It can be used for:
 
 ---
 
-## 📂 Project Structure
-
-```bash
-n8n-Login-Page-Automation/
-│
-├── workflows/
-│   └── login-workflow.json
-│
-├── scripts/
-│   └── login_test.py
-│
-├── screenshots/
-│   └── login-test-result.png
-│
-└── README.md
